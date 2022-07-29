@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## **Introduction**
-<br />
 
 Hello, and welcome to my code blog! I started this website as a way for me to share my coding work publicly. It took a lot of time and messy C# code to get here, and I could not be more excited. Now, let's get into palindromes!
 
@@ -22,15 +21,15 @@ A common coding interview task is to write code that tells you whether a given s
 
 ## **Testing**
 
-<br />
-
 One of my biggest pet peeves in coding is when people use cross-tabs, print statements, and other output in the middle of their scripts to spot check their results. Good code is consistent and accurate. It is written in a logical fashion and tells a story. Please stop giving me research assignments in the middle of your code! If you feel the need to check the results at each run, that's a good sign the code is not ready yet. This is where formal testing comes into play. Take those spot checks you were previously doing, automate them, and store them in a unit test. Then, if new code is added, you can quickly re-run all of those checks again. It will change your life! In this post, we will be using [testthat](https://testthat.r-lib.org/) to implement our unit testing. testthat is mostly built for package development, but now is a good time to introduce it. Plus, it has some features built in to make unit testing a little more fun. 
+
+<br />
 
 ## **Palindromes: Setting up tests**
 
-<br />
-
 Next, let's set up our test cases. According to [the examples at palindromelist.net](http://www.palindromelist.net/), punctuation and capitalization should be disregarded for the purposes of identifying palindromes. Let's use a sample of entries to test our palindrome function. Typically, in package development, you would store all of your tests in the `mypackage/tests/testthat` directory. For the purposes of this blog, we will place all of our unit tests in a single `run_tests()` function. This is for convenience and to allow testing and function writing to happen in a single script.
+
+<br />
 
 ```{r}
 # Load libraries

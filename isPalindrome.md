@@ -1,7 +1,5 @@
 ## **Introduction**
 
-<br />
-
 Hello, and welcome to my code blog! I started this website as a way for
 me to share my coding work publicly. It took a lot of time and messy C#
 code to get here, and I could not be more excited. Now, let’s get into
@@ -19,8 +17,6 @@ Additionally, I think it’s a great time to introduce the idea of
 
 ## **Testing**
 
-<br />
-
 One of my biggest pet peeves in coding is when people use cross-tabs,
 print statements, and other output in the middle of their scripts to
 spot check their results. Good code is consistent and accurate. It is
@@ -36,9 +32,9 @@ testing. testthat is mostly built for package development, but now is a
 good time to introduce it. Plus, it has some features built in to make
 unit testing a little more fun.
 
-## **Palindromes: Setting up tests**
-
 <br />
+
+## **Palindromes: Setting up tests**
 
 Next, let’s set up our test cases. According to [the examples at
 palindromelist.net](http://www.palindromelist.net/), punctuation and
@@ -49,6 +45,8 @@ tests in the `mypackage/tests/testthat` directory. For the purposes of
 this blog, we will place all of our unit tests in a single `run_tests()`
 function. This is for convenience and to allow testing and function
 writing to happen in a single script.
+
+<br />
 
 ``` r
 # Load libraries
