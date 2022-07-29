@@ -85,6 +85,8 @@ Note the function names that read like English. It's one of the many nice things
 
 Before we move on to writing a function, let's take a step back and think about all of the benefits of writing these tests. The simple act of gathering some test cases made us think about the things that make this 'easy' task hard: capitalization, spaces, punctuation, and empty strings to name a few. I will confess, my first version of this function would have failed on the of the 4 pitfalls I just mentioned. I'm glad I finally took the time to step back and write good tests!
 
+<br />
+
 ## **Function is_palindrome**
 
 <br />

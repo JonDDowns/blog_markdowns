@@ -111,6 +111,8 @@ strings to name a few. I will confess, my first version of this function
 would have failed on the of the 4 pitfalls I just mentioned. I’m glad I
 finally took the time to step back and write good tests!
 
+<br />
+
 ## **Function is_palindrome**
 
 <br />
@@ -150,8 +152,8 @@ run_tests(is_palindrome)
 ```
 
     ## Test passed 😀
+    ## Test passed 🥳
     ## Test passed 🥇
-    ## Test passed 😸
 
 <br />
 
@@ -171,7 +173,7 @@ test_that('Non-english characters are okay',
           expect_true(is_palindrome('ää')))
 ```
 
-    ## Test passed 😀
+    ## Test passed 🥳
 
 <br />
 
