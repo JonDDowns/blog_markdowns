@@ -124,9 +124,15 @@ run_tests(is_palindrome)
 
 And there you have it! A vectorized, flexible function to identify palindromes, all ready to go. Well, almost...we forgot about characters not in the English alphabet! I won't pretend to know any foreign languages (I'm barely literate in English and R), but it would at least be nice for it to work in other languages in theory. Perhaps a new test might look something like:
 
+<br />
+
 ```{r}
 # A lazy example, I will admit
 library(waldo) # For foreign characters
 test_that('Non-english characters are okay',
           expect_true(is_palindrome('ää')))
 ```
+
+<br />
+
+What else am I forgetting?! Let me know! Email jon.d.downs@outlook.com with your ideas!

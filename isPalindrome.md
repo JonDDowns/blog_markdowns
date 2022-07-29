@@ -149,9 +149,9 @@ is_palindrome(c('Jon', 'apple', 'sos'))
 run_tests(is_palindrome)
 ```
 
-    ## Test passed 😸
+    ## Test passed 😀
     ## Test passed 🥇
-    ## Test passed 🌈
+    ## Test passed 😸
 
 <br />
 
@@ -162,23 +162,18 @@ languages (I’m barely literate in English and R), but it would at least
 be nice for it to work in other languages in theory. Perhaps a new test
 might look something like:
 
+<br />
+
 ``` r
 # A lazy example, I will admit
 library(waldo) # For foreign characters
-```
-
-    ## Warning: package 'waldo' was built under R version 4.2.1
-
-    ## 
-    ## Attaching package: 'waldo'
-
-    ## The following object is masked from 'package:testthat':
-    ## 
-    ##     compare
-
-``` r
 test_that('Non-english characters are okay',
           expect_true(is_palindrome('ää')))
 ```
 
     ## Test passed 😀
+
+<br />
+
+What else am I forgetting?! Let me know! Email <jon.d.downs@outlook.com>
+with your ideas!
