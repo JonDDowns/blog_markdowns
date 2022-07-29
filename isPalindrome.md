@@ -108,8 +108,8 @@ think about all of the benefits of writing these tests. The simple act
 of gathering some test cases made us think about the things that make
 this ‘easy’ task hard: capitalization, spaces, punctuation, and empty
 strings to name a few. I will confess, my first version of this function
-would have failed on the of the 4 pitfalls I just mentioned. I’m glad I
-finally took the time to step back and write good tests!
+would have failed on 3 out of the 4 pitfalls I just mentioned. I’m glad
+I finally took the time to step back and write good tests!
 
 <br />
 
@@ -151,9 +151,9 @@ is_palindrome(c('Jon', 'apple', 'sos'))
 run_tests(is_palindrome)
 ```
 
-    ## Test passed 😀
-    ## Test passed 🥳
     ## Test passed 🥇
+    ## Test passed 🎊
+    ## Test passed 😸
 
 <br />
 
