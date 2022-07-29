@@ -1,4 +1,4 @@
-## Introduction
+## **Introduction**
 
 Hello, and welcome to my code blog! I started this website as a way for
 me to share my coding work publicly. It took a lot of time and messy C#
@@ -15,7 +15,7 @@ Additionally, I think it’s a great time to introduce the idea of
 
 <br />
 
-## Testing
+## **Testing**
 
 <br />
 

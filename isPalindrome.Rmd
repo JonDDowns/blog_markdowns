@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Introduction
+## **Introduction**
 
 Hello, and welcome to my code blog! I started this website as a way for me to share my coding work publicly. It took a lot of time and messy C# code to get here, and I could not be more excited. Now, let's get into palindromes!
 
@@ -19,7 +19,7 @@ A common coding interview task is to write code that tells you whether a given s
 
 <br />
 
-## Testing
+## **Testing**
 
 <br />
 
