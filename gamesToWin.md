@@ -126,7 +126,7 @@ ggplot(data = simMulti(7), aes(x = gamesPlayed)) +
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](gamesToWin_files/figure-commonmark/unnamed-chunk-2-1.png)<!-- -->
+![](https://raw.githubusercontent.com/DOH-jpd2303/blog_markdowns/main/gamesToWin_files/figure-commonmark/unnamed-chunk-2-1.png)
 
 <br />
 
@@ -205,7 +205,7 @@ ggplot(sims, aes(x = nGames, y = pAllTheWay)) +
   xlab("Number of games played") + ylab("Frequency")
 ```
 
-![]("https://raw.githubusercontent.com/DOH-jpd2303/blog_markdowns/main/gamesToWin_files/figure-commonmark/unnamed-chunk-4-1.png")
+![](https://raw.githubusercontent.com/DOH-jpd2303/blog_markdowns/main/gamesToWin_files/figure-commonmark/unnamed-chunk-4-1.png)
 
 <br />
 
