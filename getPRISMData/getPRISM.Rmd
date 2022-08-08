@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <br />
 
-For a recent project, I was interested in temperature-level data at the census tract level. I came across [the PRISM Climate Group](https://prism.oregonstate.edu/) at Oregon State. The only problem was, I needed data in tabular format, but their data are in raster format. I wrote a simple yet powerful R script that downloads a year's worth of daily temperature data and converts them to CSV files with tract-level weather data for the state of Washington. This article will walk through how to:
+For a recent project, I was interested in temperature-level data at the census tract level. I came across [the PRISM Climate Group](https://prism.oregonstate.edu/) at Oregon State. I needed data in tabular format, but their data are in raster format. I wrote a simple yet powerful R script that downloads a year's worth of daily temperature data and converts them to CSV files with tract-level weather data for the state of Washington. This article will walk through how to:
 
 <br />
 
@@ -23,11 +23,10 @@ For a recent project, I was interested in temperature-level data at the census t
 2. Unzip multiple .zip files
 3. Use parallel processing in R
 3. Convert raster data into CSV
-   a. Bonus: I'll even explain what raster data are!
 
 <br />
 
-And, at the end, I will put it all together in a single script that you can use to download an entire year of temperature data.
+And, at the end, I will provide a link to an R script on GitHub that you can use to make your own! 
 
 <br />
 
@@ -35,7 +34,7 @@ And, at the end, I will put it all together in a single script that you can use 
 
 <br />
 
-First, I encourage you to click on that link above and read a bit about [the PRISM Climate Group](https://prism.oregonstate.edu/). Heck, you may even want to engage with their [citizen science program](https://prism.oregonstate.edu/participate/). Eventually, you might find your way to their [FTP site](https://ftp.prism.oregonstate.edu/daily/). That is what we are interested in today. Before we download the data though, let's get our R session set up properly:
+First, I encourage you to click on that link above and read a bit about [the PRISM Climate Group](https://prism.oregonstate.edu/), perhaps even their [citizen science program](https://prism.oregonstate.edu/participate/). Eventually, you might find your way to their [FTP site](https://ftp.prism.oregonstate.edu/daily/). That is what we are interested in today. Before we download the data though, let's get our R session set up properly:
 
 <br />
 
@@ -81,7 +80,7 @@ tract10_fn <- paste0(config$tract10dir, "tract10.shp")
 
 <br />
 
-Let's walk through all of that. First, we load rvest, the tidyverse, and other libraries we will be using. Then, we set the year of data we want. The very last step of this exercise is fairly power hungry, so let's prepare for parallel processing to speed things up. In this example, we are saving two cores. It's wise to save at least a couple of cores. I also wanted to specify some directories for all of my downloads and final files. To help keep my code organized and portable, I like to use a JSON config file. A config file is a good place to store the types of variables that would need to change to run your code on another system. It makes the code more readable, portable, and sharable. I also stored the path to my config files in an environmental variable, mostly for privacy reasons. My config file looks like this:
+Let's walk through all of that. First, we load rvest, the tidyverse, and other libraries we will be using. Then, we set the year of data we want. The very last step of this exercise is fairly power hungry, so we set up for parallel processing. In this example, we are saving two cores. I also wanted to specify some directories for all of my downloads and final files. I use a JSON config file to keep the code organized and portable. A config file is a good place to store variables that would need to change to run your code on another system. I also stored the path to my config files in an environmental variable, mostly for privacy reasons. My config file looks like this:
 
 <br />
 
@@ -102,7 +101,7 @@ Those two directories are 1) the main directory where you want all the PRISM dat
 
 <br />
 
-Next, we download a [bil](https://www.loc.gov/preservation/digital/formats/fdd/fdd000283.shtml) file. A bil is a type of [raster](https://www.bu.edu/tech/support/research/training-consulting/online-tutorials/imagefiles/image101/#:~:text=A%20raster%20image%20file%20is,pixel%20should%20be%20displayed%20in.) file. In overly simple terms, a raster file is a combination of an image that is color-coded by some variable and a metadata file that explains the values associated with each color. The data are stored as one raster per day of the year. The below chunk of code will download all bil files for a given year at once, so allow a few minutes for it to complete. If downloads fail, the script is designed to re-try any files that it may have missed on the second run. The code:
+Next, we download a [bil](https://www.loc.gov/preservation/digital/formats/fdd/fdd000283.shtml) file. A bil is a type of [raster](https://www.bu.edu/tech/support/research/training-consulting/online-tutorials/imagefiles/image101/#:~:text=A%20raster%20image%20file%20is,pixel%20should%20be%20displayed%20in.) file. In overly simple terms, a raster file is a combination of an image that is color-coded by some variable and a metadata file that explains the values associated with each color. The data are stored as one raster per day of the year and measure (maximum temperature, minimum temperature, etc.). The below chunk of code will download all bil files for a given year at once, so allow a few minutes for it to complete. If downloads fail, the script is designed to re-try any files that it may have missed on the second run. The code:
 
 <br />
 
@@ -136,7 +135,7 @@ dlPRISMDaily(baselnk = files$lnk, file = files$files, outdir = download_dir)
 
 <br />
 
-Here, we start by writing a function, `listPRISMfiles`. We are interested in the PRISM varaible TMAX, or max temperature. We also provide the year. These are used to populate the correct path to the resource on the FTP website. The function will then search for all links on the page, and pull the reference. It will keep any references that contain the string 'PRISM', because that is a common pattern among the .bil files. The function will return the base name of the hyperlink for all of the files and a list of files available at the base link. After we write the function, we run it and store it's results in the 'files' variable. These are the files we might want to download. To avoid re-downloading old data, a second step removes any files names already in our downloads folder. If there are no new files, the script will throw a soft warning about a non-zero exit status. 
+We start by writing a function, `listPRISMfiles`. We are interested in the PRISM varaible TMAX, or max temperature. We also provide the year. These are used to populate the correct path to the resource on the FTP website. The function will then search for all links on the page, and pull the reference. It will keep any references that contain the string 'PRISM', because that is a common pattern among the .bil files. The function will return the base name of the hyperlink for all of the files and a list of files available at the base link. After we write the function, we run it and store it's results in the 'files' variable. These are the files we might want to download. To avoid re-downloading old data, a second step removes any files names already in our downloads folder. If there are no new files, the script will throw a soft warning about a non-zero exit status.
 
 <br />
 
@@ -188,7 +187,7 @@ Voila! A color-coded heat map of max US temperatures on 1/1/2011. As mentioned, 
 
 # Read in shapefile, convert to new CRS
 waCensus10 <- readOGR(tract10_fn)
-shp_reproj <- rgdal::spTransform(waCensus10, crs(myRast))
+shp_reproj <- sp::spTransform(waCensus10, crs(myRast))
 
 # Plot raster and overlay shapefile
 plot(myRast)
@@ -197,7 +196,7 @@ plot(shp_reproj, bg = 'transparent', add = TRUE)
 
 <br />
 
-The scale appears to be correct, but there is one problem: the area covered by the raster (background image) is so much larger than our census tract borders. Having so much extra raster data would slow the next step down significantly. We use the crop solution to only keep the rectangle that contains our census tract borders:
+The scale appears to be correct, but there is one problem: the area covered by the raster (background image) is much larger than our census tract borders. Having extra raster data would slow down a future step in our process, so we will use the crop function to take a Washington-sized slice of the raster file. 
 
 <br />
 
@@ -233,7 +232,7 @@ head(myOutputData)
 
 <br />
 
-And there you go! A single raster file, turned into a data frame. But....we have 365 raster files. Thankfully, we are all set up to do parallel processing. Let's turn our shape file re-project -> crop raster -> extract data process into a function. It will take some more work up front, because we need to programmatically figure out the date instead of hard-coding it. I also want to add some logic to save each result to file. Since there is a data refresh/revision schedule, it will be useful to keep the original data in separate CSVs. Finally, since this is just a demonstration, we will restrict the function to only run on the first 10 records.
+And there you go! A single raster file, turned into a data frame. But....we have 365 raster files. Thankfully, we are all set up to do parallel processing. Let's turn our shape file re-project -> crop raster -> extract data process into a function. It will take some more work up front, because we need to programmatically figure out the date instead of hard-coding it. However, it is possible: each file contains the date as an 8 digit string. I also want to save each result to file. For now, it will be useful to have a CSV file for each raster image. It will help us stay organized and quickly identify which files have already been converted in case we spread the work out over multiple script runs.
 
 
 ```{r}
