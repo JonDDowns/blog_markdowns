@@ -80,7 +80,7 @@ tract10_fn <- paste0(config$tract10dir, "tract10.shp")
 
 <br />
 
-Let's walk through all of that. First, we load rvest, the tidyverse, and other libraries we will be using. Then, we set the year of data we want. The very last step of this exercise is fairly power hungry, so we set up for parallel processing. In this example, we are saving two cores. I also wanted to specify some directories for all of my downloads and final files. I use a JSON config file to keep the code organized and portable. A config file is a good place to store variables that would need to change to run your code on another system. I also stored the path to my config files in an environmental variable, mostly for privacy reasons. My config file looks like this:
+Let's walk through all of that. First, we load rvest, the tidyverse, and other libraries we will be using. Then, we set the year of data we want. The very last step of this exercise is fairly power hungry, so we set up parallel processing. In this example, we are saving two cores. I also wanted to specify some directories for all of my downloads and final files. I use a JSON config file to keep the code organized and portable. A config file is a good place to store variables that would need to change to run your code on another system. I also stored the path to my config files in an environmental variable, mostly for privacy reasons. My config file looks like this:
 
 <br />
 
@@ -93,7 +93,7 @@ Let's walk through all of that. First, we load rvest, the tidyverse, and other l
 
 <br />
 
-Those two directories are 1) the main directory where you want all the PRISM data (raw and transformed) as well as the directory for your census tract data file (more on that in a minute). From there, the script names and creates the sub-directories needed to run the script.
+Those two directories are the main directory where you want all the PRISM data (raw and transformed) as well as the directory for your census tract data file (more on that in a minute). From there, the script names and creates the sub-directories needed to run the script.
 
 <br />
 
@@ -234,6 +234,8 @@ head(myOutputData)
 
 And there you go! A single raster file, turned into a data frame. But....we have 365 raster files. Thankfully, we are all set up to do parallel processing. Let's turn our shape file re-project -> crop raster -> extract data process into a function. It will take some more work up front, because we need to programmatically figure out the date instead of hard-coding it. However, it is possible: each file contains the date as an 8 digit string. I also want to save each result to file. For now, it will be useful to have a CSV file for each raster image. It will help us stay organized and quickly identify which files have already been converted in case we spread the work out over multiple script runs.
 
+<br />
+
 
 ```{r}
 # Convert raster to CSV ---------------------------------------------------
@@ -242,7 +244,7 @@ n_ras_to_csv <- 10
 
 # Identify all files ending with .bil (no zip)
 prismBils <- list.files(download_dir, pattern = '.bil$', 
-                        recursive = TRUE)[1:n_ras_to_csv]
+                        recursive = TRUE)
 
 outunzip_fns <- basename(dirname(prismBils))
 excludes <- which(file.exists(paste0(csv_dir, outunzip_fns, '.csv')))
@@ -288,3 +290,14 @@ parallel::clusterMap(cl = cl,
 stopCluster(cl)
 
 ```
+
+<br />
+### **Conclusion**
+
+<br />
+
+First, as promised: [the Github code for the script](https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData).
+
+<br />
+
+To recap, we wrote R code that downloaded data, unzipped them, and extracted data from a raster file. We kept organized by using a logical file structure, and had mechanisms in place to identify files that had already been processed. We used data subsets and parallel processing to speed up the script's performance. Not too bad for 122 lines of code!

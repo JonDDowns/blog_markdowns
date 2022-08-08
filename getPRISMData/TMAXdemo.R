@@ -76,7 +76,7 @@ lapply(unzip_fns, function(x)
 # Convert raster to CSV ---------------------------------------------------
 # Identify all files ending with .bil (no zip)
 prismBils <- list.files(download_dir, pattern = '.bil$', 
-                        recursive = TRUE)[1:n_ras_to_csv]
+                        recursive = TRUE)
 
 outunzip_fns <- basename(dirname(prismBils))
 excludes <- which(file.exists(paste0(csv_dir, outunzip_fns, '.csv')))
@@ -110,7 +110,7 @@ makePRISMcsv <- function(prismBil, outdir, outfn, shp, varname, funx, date){
   return(out)
 }
 
-# Run script in parallel
+# Run extraction in parallel, end by stopping cluster
 addArgs <- list(funx = mean, varname = 'TMAX', shp = waCensus10_transform,
                 outdir = csv_dir)
 parallel::clusterMap(cl = cl,
