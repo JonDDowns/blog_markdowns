@@ -216,7 +216,7 @@ myBilFile <- list.files(download_dir, pattern = '.bil$', recursive = TRUE)[1]
 myRast <- raster::raster(paste0(download_dir, myBilFile)[[1]])
 plot(myRast)
 ```
-![]([https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-4-1.png](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-4-1.png))
+![](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-4-1.png)
 
 <br />
 
