@@ -277,7 +277,7 @@ plot(myRast2)
 plot(shp_reproj, bg = 'transparent', add = TRUE)
 ```
 
-![](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-6-1.png)<!-- -->
+![](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-6-1.png)
 
 <br />
 
@@ -360,7 +360,7 @@ waCensus10 <- readOGR(tract10_fn)
     ## +ellps=GRS80 +units=us-ft +no_defs
 
     ## OGR data source with driver: ESRI Shapefile 
-    ## Source: "D:\PRISM\tract10\tract10.shp", layer: "tract10"
+    ## Source: "C:\YOURPATH\tract10.shp", layer: "tract10"
     ## with 1458 features
     ## It has 34 fields
     ## Integer64 fields read as strings:  ALANDM AWATERM
