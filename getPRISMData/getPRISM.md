@@ -175,7 +175,7 @@ about a non-zero exit status.
 
 <br />
 
-### **Download some data!**
+### **Unzip the data**
 
 <br />
 
