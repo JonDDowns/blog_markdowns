@@ -216,8 +216,8 @@ myBilFile <- list.files(download_dir, pattern = '.bil$', recursive = TRUE)[1]
 myRast <- raster::raster(paste0(download_dir, myBilFile)[[1]])
 plot(myRast)
 ```
-
-![Figure 1: National raster for 1/1/2011](https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-4-1.png)<!-- -->
+https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-4-1.png
+![Figure 1: National raster for 1/1/2011]([https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-4-1.png](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-4-1.png))<!-- -->
 
 <br />
 
@@ -259,7 +259,7 @@ plot(myRast)
 plot(shp_reproj, bg = 'transparent', add = TRUE)
 ```
 
-![Figure 2: National raster with Washington state census tracts overlayed](https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-5-1.png)<!-- -->
+![Figure 2: National raster with Washington state census tracts overlayed]([https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-5-1.png](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-5-1.png))<!-- -->
 
 <br />
 
@@ -278,7 +278,7 @@ plot(myRast2)
 plot(shp_reproj, bg = 'transparent', add = TRUE)
 ```
 
-![Figure 3: Cropped national raster with Washington census tract borders](https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-6-1.png)<!-- -->
+![Figure 3: Cropped national raster with Washington census tract borders]([https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-6-1.png](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-6-1.png))<!-- -->
 
 <br />
 
