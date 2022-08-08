@@ -1,4 +1,5 @@
 ## **How to get a year of daily census tract level temperature data in 122 lines of R code.**
+<br />
 
 ### **Introduction**
 
