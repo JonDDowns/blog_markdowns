@@ -1,41 +1,40 @@
-## Use Sportradar's NBA API to build your own database
-
-### Introduction
-
+## **Use Sportradar's NBA API to build your own database**
+<br/>
+### **Introduction**
+<br/>
 My disovery of advanced statistics in sports is one of the things that led me to data science. Watching sports on TV usually means putting up with a slew of tired observations and adages of questionable accuracy. It was fresh and interesting to learn about concepts like value over replacement and points per possession. No one number can capture a player's impact, but advanced statistics are much more useful than the other information available. 
-
+<br/>
 The NBA is my favorite league and it would be very fun to do data analysis. Before that, I must do the less glamorous task of preparing the data. Which, according to [some estimates](https://www.anaconda.com/state-of-data-science-2020), is 45% of a data scientist's working hours. I identified the [sportradar API](https://developer.sportradar.com/docs/read/basketball/NBA_v7) as an option for data. However, a SQL database would be much more appealing for the data combinations, custom statistics, and other work that would require the data in tabular format. Additionally, we have to consider the cost of requesting data from an API so frequently.
-
+<br/>
 Currently, I have been able to create two tables in my NBA database: the schedules table and the seasons table. In this post, I will show how I:
-
+<br/>
 1. Connected to the sportradar API
 2. Downloaded NBA season and schedule data
 3. Flattened the data and load it into a relational database
 4. Developed procedures for updates that only download what is necessary
-
+<br/>
 Oh, and a final personal note: this is my first Python post! I will be doing more of these moving forward.
-
-### Pre-requisites
-
+<br/>
+### **Pre-requisites**
+<br/>
 1. A [sportradar API](https://developer.sportradar.com/docs/read/basketball/NBA_v7) key
 2. A SQL database that you have successfully connected to and can modify. A tutorial to create and connect to an Azure SQL database in Python can be found [here](https://docs.microsoft.com/en-us/azure/azure-sql/database/connect-query-python?view=azuresql). 
 3. Python and all packages used in the post
 4. (Optional) Some familiarity with environment variables
 5. (Optional) An Azure KeyVault account. See how to get set up and interact with Azure KeyVault via Python [here](https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-python?tabs=azure-cli).
-
-### Getting set up
-
+<br/>
+### **Getting set up**
+<br/>
 To begin, let's load the packages and specify the folder paths we will be using. Like previous posts, I will be using a JSON configuration file and environment variables to define many of these things. It keeps information private while still letting me share the fun parts. Additionally, there are a few custom functions from my main development project. Functions from that module connect to the database and my key vault account.
-
+<br/>
 The calls to `importlib` and `types` allow me to import the `myFuns` module I have been coding in my main project folder. It is appropriately named: myFuns has all of the functions I have been using to build the database, including connections and secret handling. If you'd prefer not mess with those sorts of things, define the following variables to proceed: 
-
+<br/>
 1. An object `srNBAKey` that is your sportsradar API key for the NBA v7 API
 2. An object `cnxn` that is your connection to the SQL database engine
 3. An object `nbaDir` that will house the downloaded JSON files
-
+<br/>
 Now, let's run the code to set up our session:
-
-
+<br/>
 ```python
 # SETUP
 # Import standard packages
@@ -63,17 +62,23 @@ nbaDir = "D:/nbaBlog"
 schedDir = os.path.join(nbaDir, "schedules")
 # os.makedirs(schedDir)
 ```
+<br/>
 
 Wonderful! We have our API key ready to go and we are connected to our database. Now, let's explore the sportradar API.
 
-### Explore the API
+<br/>
+
+### **Explore the API**
+
+<br/>
 
 When you navigate to the [API main page](https://developer.sportradar.com/docs/read/basketball/NBA_v7#nba-api-map), you will be greeted with this image:
 
+<br/>
 ![sportradar API diagram](https://developer.sportradar.com/files/NBAv7SVG.svg)
-
+<br/>
 Quite helpful! Today, we will be working with the Schedule and Seasons endpoints. Let's take a peek at the data. We will start an https connection, send a get request with our API key, and load the JSON payload.
-
+<br/>
 
 ```python
 # Get list of available seasons
@@ -85,6 +90,7 @@ data = res.read()
 allSeasons = json.loads(data)['seasons']
 print(json.dumps(allSeasons[0:2], indent = 2))
 ```
+<br/>
 
     [
       {
@@ -104,10 +110,10 @@ print(json.dumps(allSeasons[0:2], indent = 2))
         }
       }
     ]
-    
+<br/>
 
 The schedule has games for the pre-season, post-season, and regular season. Each season has a unique ID and year. Next, let's pull one of these seasons and look at its schedule. We will need the year and type of a season to pull it's schedule.
-
+<br/>
 
 ```python
 # Get year and season type for first listed
@@ -123,13 +129,13 @@ res = conn.getresponse()
 data = res.read()
 testSched = json.loads(data.decode("utf8"))
 ```
-
-### Design the database tables
-
+<br/>
+### **Design the database tables**
+<br/>
 Now that we have our two file formats, we can start to think through a database design. Reading through the docs, it seems the table design is not [normalized](https://docs.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description). For example, there is a team profile API endpoint containing most of the team information included in the `home` and `away` entries, so the same information is being presented multiple times. This makes sense: it likely reduces the number of API calls for most users. Still, this underscores the point that the optimal database design is not the same as the optimal API design. We are not working with a particularly sizable dataset, so it should be easy to rebuild the database if we want to change the design later. 
-
+<br/>
 After some initial experimentation, I decided that these were the variables I wanted:
-
+<br/>
 
 
 ```python
@@ -172,22 +178,16 @@ FOREIGN KEY (seasonId) REFERENCES seasonBLOG(seasonId)
 """)
 ```
 
-
-
-
-    <sqlalchemy.engine.cursor.LegacyCursorResult at 0x1570dafb3d0>
-
-
-
+<br/>
 
 We will use the sportradar identifiers as our primary keys in the database for now. We will allow some missing data in the schedule table. After we ingest all of the data, we can think more thoroughly about other constraints to add.
-
+<br/>
 The [foreign key](https://www.techopedia.com/definition/7272/foreign-key#:~:text=A%20foreign%20key%20is%20a,establishing%20a%20link%20between%20them.) constraint lets our database know that the schedule and season tables share a common identifier, `seasonId`. That adds some built-in data quality checks. For example, it would not allow you to enter a `seasonId` in the `schedules` table unless that ID were in the `season` table. Formalizing these sorts of relationships help others quickly understand how your database is designed.
-
-### Download Data
-
+<br/>
+### **Download Data**
+<br/>
 Now that we have explored the data and created our database tables, we will write code to download all data in JSON format and save it in an organized fashion. All files will be named by the convention `schedTYPEYYYY.json` (e.g. `schedPRE2022`). We also want to avoid re-downloading data and making unnecessary API calls. The `os.path.exists` function comes in quite handy. I have already downloaded most of the data, but for the sake of this blog I will delete a few schedules and run the function. 
-
+<br/>
 
 ```python
 # Turn a schedule retrieval into a fnxn
@@ -221,11 +221,11 @@ for season in allSeasons:
     downloading schedREG2016.json
     downloading schedREG2017.json
     
-
-### Upload Data
-
+<br/>
+### **Upload Data**
+<br/>
 Now, we put the data we just downloaded into our database. It will be easiest to rename the JSON data elements to match their SQL-database counterparts. To do that, we use our trustry old friend, the JSON file. The dictionary keys will be the SR API names, and the values our desired values. The JSON file looks like this:
-
+<br/>
 
 ```python
 # JSON file with schedionaries for renaming raw to SQL column names
@@ -261,9 +261,9 @@ print(json.dumps(renames, indent = 2))
       }
     }
     
-
+<br/>
 And with that, we should have everything we need to populate our database tables! For both games and seasons, we will want to make sure the record has not been entered before. It also seems there are some seasons with no data available, so the case where the JSON file is empty will need to be handled.
-
+<br/>
 
 ```python
 games = pd.read_sql("SELECT DISTINCT schedId FROM scheduleBLOG", cnxn)
@@ -417,9 +417,9 @@ for fn in fns:
     Adding Season schedREG2017.json
     loading schedREG2017.json
     
-
+<br/>
 Let's make sure that worked. We will query the tables we loaded to and print out a few rows. Did it work? Did it fail? The suspense! The intrigue!
-
+<br/>
 
 ```python
 # Read in our newly loaded data
@@ -527,5 +527,5 @@ print(seasons)
     8 2022-08-27 17:20:15.720      None  
     9 2022-08-27 17:23:03.153      None  
     
-
+<br/>
 Looks to have worked. Eventually, a custom primary key that sorts chronologically would be nice. But, we have a good prototype to work with. We can now download some game/season statistic data and start having some real fun in the coming weeks and months. At least it will give me something to do this NBA season while I nervously wait for Chet Holmgren to [heal from his severe foot injury](https://theathletic.com/3535418/2022/08/24/thunder-chet-holmgren-out-for-season-lisfranc-injury/). Feel better soon, Chet!
