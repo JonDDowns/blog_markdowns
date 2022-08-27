@@ -50,6 +50,7 @@ To begin, let's load the packages and specify the folder paths we will be using.
 <br/>
 
 The calls to `importlib` and `types` allow me to import the `myFuns` module I have been coding in my main project folder. It is appropriately named: myFuns has all of the functions I have been using to build the database, including connections and secret handling. If you'd prefer not mess with those sorts of things, define the following variables to proceed: 
+
 <br/>
 
 1. An object `srNBAKey` that is your sportsradar API key for the NBA v7 API
