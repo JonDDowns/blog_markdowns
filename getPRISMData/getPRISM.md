@@ -1,4 +1,5 @@
 ## **How to get a year of daily census tract level temperature data in 122 lines of R code.**
+<br />
 
 ### **Introduction**
 
@@ -174,7 +175,7 @@ about a non-zero exit status.
 
 <br />
 
-### **Download some data!**
+### **Unzip the data**
 
 <br />
 
@@ -215,8 +216,7 @@ myBilFile <- list.files(download_dir, pattern = '.bil$', recursive = TRUE)[1]
 myRast <- raster::raster(paste0(download_dir, myBilFile)[[1]])
 plot(myRast)
 ```
-
-![Figure 1: National raster for 1/1/2011](https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-4-1.png)<!-- -->
+![](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-4-1.png)
 
 <br />
 
@@ -258,7 +258,7 @@ plot(myRast)
 plot(shp_reproj, bg = 'transparent', add = TRUE)
 ```
 
-![Figure 2: National raster with Washington state census tracts overlayed](https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-5-1.png)<!-- -->
+![](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-5-1.png)
 
 <br />
 
@@ -277,7 +277,7 @@ plot(myRast2)
 plot(shp_reproj, bg = 'transparent', add = TRUE)
 ```
 
-![Figure 3: Cropped national raster with Washington census tract borders](https://github.com/JonDDowns/blog_markdowns/tree/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-6-1.png)<!-- -->
+![](https://raw.githubusercontent.com/JonDDowns/blog_markdowns/main/getPRISMData/getPRISM_files/figure-commonmark/unnamed-chunk-6-1.png)
 
 <br />
 
@@ -360,7 +360,7 @@ waCensus10 <- readOGR(tract10_fn)
     ## +ellps=GRS80 +units=us-ft +no_defs
 
     ## OGR data source with driver: ESRI Shapefile 
-    ## Source: "D:\PRISM\tract10\tract10.shp", layer: "tract10"
+    ## Source: "C:\YOURPATH\tract10.shp", layer: "tract10"
     ## with 1458 features
     ## It has 34 fields
     ## Integer64 fields read as strings:  ALANDM AWATERM
