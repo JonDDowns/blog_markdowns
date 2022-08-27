@@ -10,7 +10,7 @@ My disovery of advanced statistics in sports is one of the things that led me to
 
 <br/>
 
-The NBA is my favorite league and it would be very fun to do data analysis. Before that, I must do the less glamorous task of preparing the data. Which, according to [some estimates](https://www.anaconda.com/state-of-data-science-2020), is 45% of a data scientist's working hours. I identified the [sportradar API](https://developer.sportradar.com/docs/read/basketball/NBA_v7) as an option for data. However, a SQL database would be much more appealing for the data combinations, custom statistics, and other work that would require the data in tabular format. Additionally, we have to consider the cost of requesting data from an API so frequently.
+The NBA is my favorite league and it would be very fun to explore its data. Before that, I must do the less glamorous task of preparing the data. Which, according to [some estimates](https://www.anaconda.com/state-of-data-science-2020), is 45% of a data scientist's working hours. I identified the [sportradar API](https://developer.sportradar.com/docs/read/basketball/NBA_v7) as an option for data. However, a SQL database would be much more appealing for the data combinations, custom statistics, and other work that would require the data in tabular format. Additionally, we have to consider the cost of requesting data from an API so frequently.
 
 <br/>
 
