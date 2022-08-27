@@ -584,3 +584,6 @@ print(seasons)
 
 Looks to have worked. Eventually, a custom primary key that sorts chronologically would be nice. But, we have a good prototype to work with. We can now download some game/season statistic data and start having some real fun in the coming weeks and months. At least it will give me something to do this NBA season while I nervously wait for Chet Holmgren to [heal from his severe foot injury](https://theathletic.com/3535418/2022/08/24/thunder-chet-holmgren-out-for-season-lisfranc-injury/). Feel better soon, Chet!
 
+<br/>
+
+That is it for this week. I hope you check back in for more! Email me at [jon.d.downs@outlook.com](jon.d.downs@outlook.com) with questions and comments.
