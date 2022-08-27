@@ -1,0 +1,25 @@
+{
+    "schedule": {
+        "id": "schedId", 
+        "sr_id": "srMatchId", 
+        "scheduled": "schedDt",
+        "home_points": "homePoints", 
+        "away_points": "awayPoints",
+        "coverage": "coverage", 
+        "status": "status", 
+        "track_on_court": "trackOnCourt",
+        "idHome": "idHome", 
+        "sr_idHome": "srIdHome", 
+        "nameHome": "nameHome", 
+        "aliasHome": "aliasHome",
+        "idAway": "idAway", 
+        "sr_idAway": "srIdAway", 
+        "nameAway": "nameAway", 
+        "aliasAway": "aliasAway"
+    },
+    "season": {
+        "id": "seasonId",
+        "type": "seasonType",
+        "year": "seasonYear"
+    }
+}
