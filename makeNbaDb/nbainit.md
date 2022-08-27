@@ -20,7 +20,7 @@ Currently, I have been able to create two tables in my NBA database: the schedul
 
 1. Connected to the sportradar API
 2. Downloaded NBA season and schedule data
-3. Flattened the data and load it into a relational database
+3. Flattened the data and loaded it into a relational database
 4. Developed procedures for updates that only download what is necessary
 
 <br/>
