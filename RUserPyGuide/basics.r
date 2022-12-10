@@ -34,7 +34,10 @@ browseVignettes("DBI") # Long form, tutorial-style documentation
 ##################################################################
 # Some notation common across R and Python (and, really, coding in general)
 # "." is the working directory
+
+# Note that, if you do not assign an object, it is printed (not saved)
 list.files(".")
+myFiles <- list.files(".")
 
 # ".." is the PARENT of the working directory
 list.files("..")
@@ -42,6 +45,9 @@ list.files("..")
 # "~" is the HOME directory
 list.files("~")
 list.files("~", pattern = "^Do*") # Use regex to search
+
+# Get environmental variables using Sys.getenv()
+Sys.getenv("HOME")
 
 ##################################################################
 # Working with databases
@@ -52,28 +58,29 @@ list.files("~", pattern = "^Do*") # Use regex to search
 cnxn <- DBI::dbConnect(
     drv = odbc::odbc(),
     Driver = "{ODBC Driver 18 for SQL Server}",
-    server = "jondowns.database.windows.net,1433",
+    server = Sys.getenv("dbAddress"),
     database = "adventureworks",
     uid = "readAdvWorks",
     pwd = "Plznohackme!123") # Please don't do this
 
+# List tables in a schema
+dbListTables(cnxn, schema_name = "SalesLT")
+
 # Query database
 cust <- DBI::dbGetQuery(cnxn, "SELECT * FROM SalesLt.Customer")
-custAdd <- DBI::dbGetQuery(cnxn, "SELECT * FROM SalesLt.CustomerAddress")
-
-# Add parameters to your queries!
-# use glue SQL- useful helpers that are language specific
-qryWithParams <- glue::glue_sql(
-    .con = cnxn,
-    "SELECT TABLE_NAME, COLUMN_NAME
-    FROM INFORMATION_SCHEMA.COLUMNS 
-    WHERE TABLE_SCHEMA = {scheme}",
-    scheme = "SalesLt")
-DBI::dbGetQuery(cnxn, qryWithParams)
-
-# My preference: read SQL queries from file
-qry <- readr::read_file("qry.sql") %>%
-    DBI::dbGetQuery(con = cnxn)
+custAdd <- DBI::dbGetQuery(
+    cnxn,
+    "SELECT a.CustomerID
+    , a.AddressType
+    , b.AddressLine1
+    , b.AddressLine2
+    , b.City
+    , b.StateProvince
+    , b.CountryRegion
+    , b.PostalCode
+    , b.ModifiedDate
+    FROM SalesLt.CustomerAddress AS a
+    LEFT JOIN SalesLT.Address AS b ON a.AddressID = b.AddressID")
 
 ##################################################################
 # Explore and subset data
@@ -91,42 +98,92 @@ rownames(cust) # Less common
 # For lists, object[1] would select the first object
 colnames(cust)[1]
 
+# Pick the columns you want to keep/reorder columns
+keepCols <- c(
+    "CustomerID", "FirstName", "LastName",
+    "CompanyName", "SalesPerson", "Phone",
+    "EmailAddress")
+cust2 <- cust[, keepCols]
+
 # Preview data using head()
-head(cust)
+head(cust2)
 
 # For dataframes and matrices, use Object[row, column]
-cust[1, ] # First row
-cust[, 4] # Fourth column
-cust[1:5, 4] # Fourth column for first 5 rows
+cust2[1, ] # First row
+cust2[, 4] # Fourth column
+cust2[1:5, 4] # Fourth column for first 5 rows
 
 ##################################################################
-# Manipulate data
+# Manipulate data (base and tidy)
 ##################################################################
 # "Base R" (R + packages that don't have to be installed)
 # works great for people who have coding background
-keepCols <- c("LastName", "LNAME5")
 custBase <- within(
-    cust,
+    cust2,
     LNAME5 <- substring(LastName, 1, 5)
-    )[, keepCols]
+    )
+head(custBase)
 
 # For SAS converts, the tidyverse feels more familiar
 # tidyverse is a universe of packages and functions with a very
 # active and well-known community
 # One of the key concepts in the tidyverse is the pipe "%>%" operator
 # It reminds me of SAS because data are manipulated in "blocks"
-custTidy <- cust %>%
+custTidy <- cust2 %>%
     mutate(
         LNAME5 = substring(LastName, 1, 5)
-    ) %>%
-    select(LastName, LNAME5)
-
+    ) 
 identical(custTidy, custBase)
 
 # Another options is data.table, which I'm less of an expert on
 # It looks a lot like base R, except:
 # 1) it is faster
 # 2) It has special operations for summarizing data/working by groups
-# More in a minute
 
+########################################################
+# Regular expressions/text manipulation
+########################################################
+# Search for strings containing pattern
+grep("^Do", cust$LastName) # Returns index (row numbers)
+grep("^Do", cust$LastName, value = TRUE) # Returns full string
 
+# Get the part of the string that matched only
+strIdxs <- regexpr("^Do", cust$LastName) # Index of match
+
+# Frequency table
+table(
+    substring(cust$LastName, strIdxs,
+    attr(strIdxs, "match.length"))
+)
+
+########################################################
+# Joining data
+########################################################
+# Inner/left/right/full joins using tidyverse
+# Remember: %>% passes the object as first arg to next fxn
+left_join(cust2, custAdd, by = "CustomerID") %>% head
+anti_join(cust2, custAdd) %>% length()
+anti_join(custAdd, cust2) %>% length()
+
+# Now, let's actually save the records that are in both
+custNameAdd <- inner_join(cust2, custAdd)
+head(custNameAdd)
+
+########################################################
+# Grouping and summarizing data
+########################################################
+# Let's get the count of addresses for each customer
+custNameAdd %>% count(CustomerID, sort = TRUE) %>% head(10)
+
+# Pull all data for any customers with 2+ addresses
+custNameAdd %>%
+    count(CustomerID) %>%
+    filter(n > 1) %>%
+    left_join(custNameAdd) %>%
+    head(10)
+
+# Number of customers by salesperson
+custNameAdd %>%
+    group_by(SalesPerson) %>%
+    summarize(nCust = n_distinct(CustomerID)) %>%
+    arrange(nCust)
