@@ -2,10 +2,7 @@
 # Package/module management
 ##################################################################
 # Installing packages
-# install.packages("RColorBrewer")
-
-# R is more 'functional': most operations happen via a function
-# More on how Python is different later
+install.packages("RColorBrewer")
 
 # As long as an R package is installed, you can access its functions
 # like this:
@@ -27,6 +24,7 @@ library(tidyverse)
 # Get help!
 ##################################################################
 ?mutate # Documentation for a specific function
+?dplyr::mutate
 browseVignettes("DBI") # Long form, tutorial-style documentation
 
 ##################################################################
@@ -42,12 +40,11 @@ myFiles <- list.files(".")
 # ".." is the PARENT of the working directory
 list.files("..")
 
-# "~" is the HOME directory
-list.files("~")
-list.files("~", pattern = "^Do*") # Use regex to search
+# Look for specific files
+list.files(".", pattern = "*.py") # Use regex to search
 
-# Get environmental variables using Sys.getenv()
-Sys.getenv("HOME")
+# Access environment variables
+Sys.getenv("PATH")
 
 ##################################################################
 # Working with databases
@@ -57,11 +54,15 @@ Sys.getenv("HOME")
 # database is optional
 cnxn <- DBI::dbConnect(
     drv = odbc::odbc(),
-    Driver = "{ODBC Driver 18 for SQL Server}",
+    Driver = "{ODBC Driver 17 for SQL Server}",
     server = Sys.getenv("dbAddress"),
     database = "adventureworks",
     uid = "readAdvWorks",
     pwd = "Plznohackme!123") # Please don't do this
+
+# Jon: Talk about this! 
+# Really, you should use ODBC connections for most DOH work
+# cnxn <- DBI::dbConnect(odbc::odbc(), "dqss")
 
 # List tables in a schema
 dbListTables(cnxn, schema_name = "SalesLT")
@@ -87,8 +88,8 @@ custAdd <- DBI::dbGetQuery(
 ##################################################################
 # Use dim, nrow, and ncol to get rows/columns, and both
 dim(cust) # Rows x columns
-nrow(cust) == dim(cust)[1] # Number of rows (equivalent to dim[1])
-ncol(cust) == dim(cust)[2] # Number of columns (equivalent to dim[2])
+dim(cust)[1]
+dim(cust)[2]
 
 # Print out row and column names
 colnames(cust) # Most common
@@ -118,10 +119,8 @@ cust2[1:5, 4] # Fourth column for first 5 rows
 ##################################################################
 # "Base R" (R + packages that don't have to be installed)
 # works great for people who have coding background
-custBase <- within(
-    cust2,
-    LNAME5 <- substring(LastName, 1, 5)
-    )
+custBase <- cust2
+custBase$LNAME5 <- substring(custBase$LastName, 1, 5)
 head(custBase)
 
 # For SAS converts, the tidyverse feels more familiar
@@ -144,7 +143,14 @@ identical(custTidy, custBase)
 # Regular expressions/text manipulation
 ########################################################
 # Search for strings containing pattern
-grep("^Do", cust$LastName) # Returns index (row numbers)
+
+# grepl: Gets T/F for each record
+table(
+    grepl("^Do", cust$LastName)
+)
+cust[grep("^Do", cust$LastName)]
+
+
 grep("^Do", cust$LastName, value = TRUE) # Returns full string
 
 # Get the part of the string that matched only
