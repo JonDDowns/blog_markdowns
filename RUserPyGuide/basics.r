@@ -4,14 +4,16 @@
 # Installing packages
 install.packages("RColorBrewer")
 
+getwd()
+
 # As long as an R package is installed, you can access its functions
 # like this:
-RColorBrewer::display.brewer.all()
+dplyr::mutate(data.frame(nums = 1:10), new = cumsum(nums))
 
 # Alternatively, you can load the package to avoid using
 # package::function() notation
-library(RColorBrewer)
-display.brewer.all()
+library(dplyr)
+mutate(data.frame(nums = 1:10), new = cumsum(nums))
 # This is typically convention, though there are cases
 # where it is good to be specific
 
@@ -19,7 +21,7 @@ display.brewer.all()
 library(odbc)
 library(DBI)
 library(tidyverse)
-
+dplyr::mutate(data.frame(nums = 1:5), new = cumsum(nums))
 ##################################################################
 # Get help!
 ##################################################################
@@ -88,8 +90,7 @@ custAdd <- DBI::dbGetQuery(
 ##################################################################
 # Use dim, nrow, and ncol to get rows/columns, and both
 dim(cust) # Rows x columns
-dim(cust)[1]
-dim(cust)[2]
+
 
 # Print out row and column names
 colnames(cust) # Most common
